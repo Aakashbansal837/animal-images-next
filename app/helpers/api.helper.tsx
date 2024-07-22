@@ -1,4 +1,5 @@
 import { ANIMAL_TYPES, CAT_API_KEY } from "../constants/common";
+import logger from "./logger";
 
 let map = new Map();
 
@@ -43,11 +44,11 @@ export const fetchCats = async (URL: string, limit: number = 10, skip: number = 
         }
       });
       let tmp = await response.json();
-      console.log("before" ,data);
+      logger.info("before" ,data);
       data = tmp.filter((dt : CatListOB)=> dt.image?.url)
 
       map.set(URL , data);
-      console.log("after",data);
+      logger.info("after",data);
 
     }
     total = data.length;
@@ -71,7 +72,7 @@ export const fetchCats = async (URL: string, limit: number = 10, skip: number = 
     return { status : 200 , data : resData , total}
   }
   catch (err) {
-    // console.log(err)
+    // logger.info(err)
     return { status : 500 , error : err};
 
   }
@@ -95,12 +96,10 @@ export const fetchDogs = async (URL: string, limit: number = 10, skip: number = 
       // fetch data since it is not available in cache
       const response = await fetch(API_URL);
       let tmp = await response.json();
-      console.log("before" ,data);
       data = tmp.filter((dt : CatListOB)=> dt.image?.url)
-
       map.set(URL , data);
-      console.log("after",data);
-
+      
+      logger.info("data after filter" ,data);
     }
     total = data.length;
   
@@ -123,7 +122,7 @@ export const fetchDogs = async (URL: string, limit: number = 10, skip: number = 
     return { status : 200 , data : resData , total}
   }
   catch (err) {
-    // console.log(err)
+    // logger.info(err)
     return { status : 500 , error : err};
 
   }

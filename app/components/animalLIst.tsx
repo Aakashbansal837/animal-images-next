@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { fetchData } from '../helpers/api.helper';
 import ImageGrid from './ImageGrid';
+import logger from '../helpers/logger';
 
 
 interface AnimalListProps {
@@ -22,18 +23,18 @@ const AnimalList: React.FC<AnimalListProps> = ({ URL , animalType }) => {
     try {  
       let res : any = await fetchData(URL, 10, currPage*10 , animalType);
 
-      console.log("[AnimalList]", res);
+      logger.info("[AnimalList]", res);
 
       if (res.status == 200) {
         setData(res.data);
         setTotal(res.total);
       } else {
         setError(true);
-        console.error("Error fetching cats:", res.error);
+        logger.error("Error fetching cats:", res.error);
       }
     } catch (err) { 
       setError(true);
-      console.log("Unexpected error:", err);
+      logger.error("Unexpected error:", err);
     } finally {
       setShowLoading(false);
     }
