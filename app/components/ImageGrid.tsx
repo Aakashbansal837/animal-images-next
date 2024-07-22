@@ -12,8 +12,8 @@ interface ImageDataOb {
 const ImageGrid = ({ data = [] }) => {
   return (
     <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 sm:m-4 grid-cols-1 m-4 gap-4'>{
-      data.map((dt: ImageDataOb) => <div>
-        <div className="card bg-base-100  shadow-xl min-h-full">
+      data.map((dt: ImageDataOb , index) => 
+        <div className="card bg-base-100  shadow-xl min-h-full" key={index}>
           <figure>
             <img
               src={dt.url}
@@ -25,8 +25,7 @@ const ImageGrid = ({ data = [] }) => {
             </h2>
             <p>{dt.description}</p>
           </div>
-        </div>
-      </div>)
+        </div>)
     }</div>
   )
 }
