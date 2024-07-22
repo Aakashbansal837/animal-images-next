@@ -10,7 +10,6 @@ export default function Home() {
         <Link href='/cats' className={"btn btn-info text-3xl btn-square " + style.dogs}> Cats </Link>
         <Link href='/dogs' className={"btn btn-info text-3xl btn-square " + style.dogs}> Dogs </Link>
       </div>
-
     </main>
   );
 }
