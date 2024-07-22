@@ -1,4 +1,4 @@
-import { ANIMAL_TYPES, CAT_API_KEY } from "../constants/common";
+import { ANIMAL_TYPES, CAT_API_KEY, CAT_LIST_BY_CATEGORY } from "../constants/common";
 import logger from "./logger";
 
 let map = new Map();
@@ -52,6 +52,11 @@ export const fetchCats = async (URL: string, limit: number = 10, skip: number = 
 
     }
     total = data.length;
+
+
+    if(total == 0){
+      return { status : 404 , error : 'no data found'}
+    }
   
     if(skip > total) {
       return { status : 400 , error : new Error('limit out of reach')}
@@ -81,8 +86,21 @@ export const fetchCats = async (URL: string, limit: number = 10, skip: number = 
 export const fetchDogs = async (URL: string, limit: number = 10, skip: number = 0) => {
   try {
 
-    const API_URL = URL;
-    let data : CatListOB[] = [];
+    // to be implemented
+    return { status : 400 , error : 'api not available'}
+  }
+
+  catch (err) {
+    // logger.info(err)
+    return { status : 500 , error : err};
+  }
+}
+
+export const fetchCatsByCategory= async (limit: number = 10, skip: number = 0 , filter : string = '') => {
+  try {
+
+    const API_URL = CAT_LIST_BY_CATEGORY + filter;
+    let data : any[] = [];
     let resData: CatListOB[] = [];
     let total : number = 0;
 
@@ -94,14 +112,25 @@ export const fetchDogs = async (URL: string, limit: number = 10, skip: number = 
     }
     else {
       // fetch data since it is not available in cache
-      const response = await fetch(API_URL);
+      const response = await fetch(API_URL, {
+        headers : {
+          'x-api-key': CAT_API_KEY
+        }
+      });
       let tmp = await response.json();
-      data = tmp.filter((dt : CatListOB)=> dt.image?.url)
+      logger.info("[fetchCatsByCategory]" ,data);
+      data = tmp.filter((dt : CatListOB)=> dt.url)
+
       map.set(URL , data);
-      
-      logger.info("data after filter" ,data);
+      logger.info("[fetchCatsByCategory] filtered",data);
+
     }
     total = data.length;
+
+
+    if(total == 0){
+      return { status : 404 , error : 'no data found'}
+    }
   
     if(skip > total) {
       return { status : 400 , error : new Error('limit out of reach')}
@@ -110,11 +139,11 @@ export const fetchDogs = async (URL: string, limit: number = 10, skip: number = 
     data = data.slice(skip , skip+limit)
 
     for(let i = 0 ; i < data.length; i++){
-      let ob : CatListOB = {
-        name : data[i].name,
-        description: data[i].description,
-        url : data[i].image?.url,
-        temperament : data[i].temperament
+      let ob : any = {
+        name : data[i].breeds[0].name,
+        description: data[i].breeds[0].description,
+        url : data[i].url,
+        temperament : data[i].breeds[0].temperament
       }
       resData.push(ob);
     }

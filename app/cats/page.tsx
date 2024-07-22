@@ -5,7 +5,7 @@ const CatsPage = async () => {
 
   //  add additional functionality later on
   return (
-    <div className='max-h-full m-0'><AnimalList animalType={ANIMAL_TYPES.CAT} URL={CAT_LIST_URL} /></div>
+    <div className=' h-screen m-0'><AnimalList animalType={ANIMAL_TYPES.CAT} URL={CAT_LIST_URL} /></div>
   )
 }
 
