@@ -6,9 +6,10 @@ import ImageGrid from './ImageGrid';
 
 interface AnimalListProps {
   URL : string,
+  animalType : string
 }
 
-const AnimalList: React.FC<AnimalListProps> = ({ URL }) => {
+const AnimalList: React.FC<AnimalListProps> = ({ URL , animalType }) => {
   let [showloading, setShowLoading] = useState(false);
   let [data ,setData] = useState([]);
   let [total , setTotal] = useState(0);
@@ -19,7 +20,7 @@ const AnimalList: React.FC<AnimalListProps> = ({ URL }) => {
     setShowLoading(true);
     setError(false);
     try {  
-      let res : any = await fetchData(URL, 10, currPage*10);
+      let res : any = await fetchData(URL, 10, currPage*10 , animalType);
 
       console.log("[AnimalList]", res);
 
@@ -46,7 +47,7 @@ const AnimalList: React.FC<AnimalListProps> = ({ URL }) => {
 
   return (
     showloading ?
-      <div>Loading ...</div> :
+      <div className='flex items-center justify-center h-screen'>Loading ...</div> :
       error ? <div>Error </div> :
       <div>
         <ul>
