@@ -17,7 +17,8 @@ export const fetchData = async (URL: string, limit: number = 10, skip: number = 
 
     const API_URL = URL;
     let data : CatListOB[] = [];
-    let resData= [];
+    let resData: CatListOB[] = [];
+    let total : number = 0;
 
 
     // checking if data exist in cache.
@@ -40,24 +41,25 @@ export const fetchData = async (URL: string, limit: number = 10, skip: number = 
       console.log("after",data);
 
     }
+    total = data.length;
   
-    if(skip + limit > data.length) {
+    if(skip > total) {
       return { status : 400 , error : new Error('limit out of reach')}
     }
-    
 
-    for(let i = skip ; i < skip+limit; i++){
+    data = data.slice(skip , skip+limit)
+
+    for(let i = 0 ; i < data.length; i++){
       let ob : CatListOB = {
         name : data[i].name,
         description: data[i].description,
         url : data[i].image?.url,
         temperament : data[i].temperament
       }
-
       resData.push(ob);
     }
 
-    return { status : 200 , data : resData , total : data.length}
+    return { status : 200 , data : resData , total}
   }
   catch (err) {
     // console.log(err)
